@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head(${titulo})"></head>
+<body>
+    <nav th:replace="fragments/navbar :: navbar('fornecedores')"></nav>
+
+    <main class="container py-4" data-page="fornecedores-detalhe">
+        <section class="app-hero mb-4">
+            <div class="app-hero-copy">
+                <span class="badge text-bg-light mb-3">Ficha + QR</span>
+                <h1 class="display-6 mb-2" th:text="${fornecedores.modelo}">fornecedore/h1>
+                <p class="text-secondary mb-0">
+                    O QR code guarda apenas o codigo unico. Num telemovel, abre
+                    <code>/fornecedores/scan</code> e aponta a camara ao codigo impresso.
+                </p>
+            </div>
+            <div class="app-hero-actions">
+                <button type="button" class="btn btn-outline-light btn-lg" onclick="window.print()">Imprimir QR</button>
+                <a class="btn btn-outline-light btn-lg" th:href="@{/fornecedores/scan}">Ler QR</a>
+                <a class="btn btn-primary btn-lg" th:href="@{/fornecedores/{id}/editar(id=${fornecedores.id})}">Editar</a>
+            </div>
+        </section>
+
+        <div class="row g-4">
+            <div class="col-lg-7">
+                <section class="card shadow-sm border-0 h-100">
+                    <div class="card-body p-4">
+                        <h2 class="h4 mb-4">Dados do fornecedor/h2>
+                        <dl class="row mb-0">
+                            <dt class="col-sm-4">ID</dt>
+                            <dd class="col-sm-8" th:text="${fornecedor.id}">1</dd>
+                            <dt class="col-sm-4">Codigo unico</dt>
+                            <dd class="col-sm-8"><span class="qr-code-label" th:text="${fornecedorecodigoUnico}">uuid</span></dd>
+                            <dt class="col-sm-4">nome</dt>
+                            <dd class="col-sm-8" th:text="${fornecedorenome}"></dd>
+                            <dt class="col-sm-4">morada</dt>
+                            <dd class="col-sm-8" th:text="${fornecedoremorada}"></dd>
+                            <dt class="col-sm-4">localidade</dt>
+                            <dd class="col-sm-8" th:text="${fornecedorelocalidade}"></dd>
+                            <dt class="col-sm-4">email</dt>
+                            <dd class="col-sm-8" th:text="${fornecedoreemail}"></dd>
+                            <dt class="col-sm-4">telemovel</dt>
+                            <dd class="col-sm-8" th:text="${fornecedoretelemovel} ?: '-'"></dd>
+                            <dt class="col-sm-4">site</dt>
+                            <dd class="col-sm-8" th:text="${fornecedoresite} ?: '-'"></dd>
+                        </dl>
+                    </div>
+                </section>
+            </div>
+            <div class="col-lg-5">
+                <section class="card shadow-sm border-0 mb-4">
+                    <div class="card-body p-4">
+                        <h2 class="h4 mb-3">QR Code</h2>
+                        <div class="qr-wrapper"
+                             id="qrCodeContainer"
+                             th:attr="data-qr-code=${fornecedorecodigoUnico}">
+                        </div>
+                        <p class="text-secondary small mt-3 mb-0">
+                            O QR guarda apenas o codigo unico do fornecedore para poder ser impresso e lido em qualquer ambiente.
+                        </p>
+                    </div>
+                </section>
+
+                <section class="card shadow-sm border-0">
+                    <div class="card-body p-4">
+                        <h2 class="h4 mb-3">Imagem</h2>
+                        <img th:if="${fornecedoreimagemPath != null}" class="fornecedoredetail-image"
+                             th:src="@{'/uploads/' + ${fornecedoreimagemPath}}" alt="Imagem do fornecedore>
+                        <p th:if="${fornecedoreimagemPath == null}" class="text-secondary mb-0">
+                            Este fornecedoreainda nao tem imagem associada.
+                        </p>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <div th:replace="fragments/scripts :: scripts(${pageScript})"></div>
+</body>
+</html>
